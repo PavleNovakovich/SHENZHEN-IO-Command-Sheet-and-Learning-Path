@@ -182,7 +182,7 @@ shenzhen-io-command-sheet/
 │
 ├── README.md
 │
-└── SHENZHEN-IO-Command-Sheet-and-Learning-Path.
+└── SHENZHEN-IO-Command-Sheet-and-Learning-Path
 ```
 
 Additional examples and references can be added as the project grows.
