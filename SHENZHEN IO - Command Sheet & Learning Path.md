@@ -228,7 +228,7 @@ Note the LC70G04 exposes both a normal and an inverted output pin.
 | **FM/iX FM Blaster** | p.27 | — | 1-voice FM tone generator, 10 preset instruments (00 Harpsiclav … 09 Bass Drum), MIDI-ish note numbers with 60 = middle C. New note or instrument change cuts the current note. |
 | **PGA33X6** logic array | p.32 | 3 buffered in / 3 buffered out | Sum-of-products programmable logic, 6 product columns, 1 set/reset flip-flop with feedback. **Not suited to low-power applications.** (Datasheet is in Chinese only — by design.) |
 
----
+---Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more
 
 ## PART 3 — HOW TO LEARN THE GAME WITH THIS MANUAL
 
@@ -244,7 +244,6 @@ The manual is deliberately built as a **reference binder**, not a tutorial you r
 If you're not printing it: at minimum keep **page 4 (the Reference Card)** open on a second monitor/phone, and bookmark pages 13–16 (Language Reference) and 18–33 (Datasheets). That single choice is most of the difference between the game feeling opaque and feeling fair.
 
 ### 3.2 The reading order that actually works
-
 | Step | Read | Why |
 |---|---|---|
 | 1 | **p.9 — App Note 268** (simple I/O vs XBus) | Everything else depends on this distinction. Learn it before touching a puzzle. |
@@ -284,3 +283,122 @@ The score screen tracks **cost, power, and lines of code**, and they trade off a
 ---
 
 *Other guides in this folder worth using after the manual: the MCxxxx Reference Card 2.0
+
+### A few examples
+
+CAMPAIGN 1 — LONGTENG ELECTRONICS
+1. FAKE SURVEILLANCE CAMERA
+Score: 6 – 60 – 12
+Manual: p.4, p.10 (App Note 393), p.18
+
+The teaching puzzle for time units and the shared-net trick. This puzzle uses two MC4000 microcontrollers. Important: MCU **A** and MCU **B** are labels used in this guide to show which MC4000 the code belongs to. Do not type these labels into the MC4000. Only enter the instructions shown in the code blocks.
+
+ 
+**MCU** = Microcontroller Unit
+
+\#MCU A **MC4000**
+
+mov 0 p0
+
+slp 6
+
+mov 100 p0
+
+slp 6
+
+\#MCU B **MC4000**
+
+
+
+  mov 0 p0
+  
+  slp 4
+
+  mov 100 p0
+  
+  slp 2
+
+  mov 0 p0
+
+  slp 1
+
+   mov 100 p0
+  
+  slp 1
+
+  ###
+  **How it works**:
+  Each program acts as a simple waveform generator: it writes a value to p0, sleeps for a certain number of time units, then changes the value and sleeps again.
+
+  mov 0 p0 puts pin p0 into output mode at 0 (manual p.18).
+
+  slp 6 advances time by six time units while the MC4000 sleeps. The next instruction changes p0 to 100, followed by another six time units of sleep.
+
+  Therefore, MCU A produces a repeating 12-time-unit cycle:
+  
+  0 → 6 time units → 100 → 6 time units → repeat
+
+  The two MC4000s work together through the shared simple I/O net, producing the required output pattern.
+
+Manual rule to remember: the way to advance time is to use slp. Instructions themselves do not advance time; slp is effectively the clock.
+
+
+
+2. CONTROL SIGNAL AMPLIFIER
+
+Score: 3 – 240 – 4  Manual: p.15 (arithmetic), p.9 (simple I/O)
+
+This puzzle teaches a very common SHENZHEN I/O pattern: **read** → **transform** → **write** → **sleep.**
+
+**MC4000**
+
+*Enter this code*:
+
+mov p0 acc
+
+mul 2
+
+mov acc p1
+
+slp 1
+
+
+**Line by line**
+
+mov p0 acc
+Read the input from p0. Reading a pin register puts that pin into input mode (manual p.18).
+
+mul 2 
+Multiply the value in acc by 2:
+
+acc = acc × 2
+
+The manual notes that arithmetic operations implicitly target acc (p.14), which is why no destination register is specified.
+
+mov acc p1
+
+Write the doubled value from acc to output pin p1.
+
+slp 1
+
+Advance the program by one time unit. This allows the MC4000 to produce exactly one output sample per time unit.
+ 
+ **Why it works**:
+ This is the minimal “read → transform → write → sleep” loop, and this basic structure appears in many solutions throughout the game.
+
+No clamping logic is needed. The manual guarantees that arithmetic results outside −999…999 are clamped to the nearest legal value (p.15).
+
+Simple I/O itself is capped at 100 (p.9). This means that if the input is above 50, multiplying it by 2 produces a value above 100, which is then limited to 100 rather than wrapping around.
+
+**Quick way to remember it**
+
+p0 → acc → ×2 → p1
+         
+          ↓
+        slp 1
+
+
+
+
+
+
