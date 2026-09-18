@@ -283,4 +283,4 @@ The score screen tracks **cost, power, and lines of code**, and they trade off a
 
 ---
 
-*Other guides in this folder worth using after the manual: the MCxxxx Reference Card 2.0, the Junior Embedded Engineer's Manual, the Remainder Note, and the walkthroughs (including the "without using @ or gen" variant for self-imposed constraints).*
+*Other guides in this folder worth using after the manual: the MCxxxx Reference Card 2.0
