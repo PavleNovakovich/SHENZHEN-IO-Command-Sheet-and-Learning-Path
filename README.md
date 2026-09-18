@@ -12,7 +12,7 @@ This project is intended as a **quick reference and simplified learning guide** 
 
 The main document contains the complete **Command Sheet & Learning Path**:
 
-👉 **[Open the Command Sheet & Learning Path](SHENZHEN IO - Command Sheet & Learning Path.md)**
+👉 **[Open the Command Sheet & Learning Path](README.md)**
 
 It is divided into three main parts:
 
